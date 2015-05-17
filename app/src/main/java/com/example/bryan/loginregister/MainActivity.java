@@ -13,7 +13,7 @@ import android.widget.EditText;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
     Button bLogout;
     EditText etName, etAge, etUsername;
-
+    UserLocalStore userLocalStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,15 +24,36 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         etUsername = (EditText) findViewById(R.id.etUsername);
         bLogout = (Button) findViewById(R.id.bLogout);
         bLogout.setOnClickListener(this);
-
+        userLocalStore = new UserLocalStore(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (authenticate() == true){
+
+        }
+    }
+
+    private boolean authenticate(){
+        return userLocalStore.getUserLoggedIn();
+    }
+    private void displayUserDetails(){
+        User user = userLocalStore.getLoggedInUser();
+        etUsername.setText(user.username);
+        etName.setText(user.name);
+        etAge.setText(user.age + "");
+        etUsername.setText(user.name);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.bLogout:
-                startActivity(new Intent(this, Login.class));
+                userLocalStore.clearUserData();
+                userLocalStore.setUserLoggedIn(false);
 
+
+                startActivity(new Intent(this, Login.class));
                 break;
         }
     }

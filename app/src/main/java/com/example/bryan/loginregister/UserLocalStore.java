@@ -47,5 +47,12 @@ public class UserLocalStore {
         spEditor.commit();
     }
 
+    public  boolean getUserLoggedIn(){
+        if (userLocalDatabase.getBoolean("loggedIn", false) == true){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 }
